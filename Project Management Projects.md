@@ -4,13 +4,17 @@ Here are some of my projects as a Project Manager, I really enjoy developing pro
 people from around the world, taking bootcamps and courses is always a great idea, all of these projects were taken online but easily
 they can be the same in a hybrid or in-office environment
 
+PS. I'm not into in-office projects I believe that remote work is possible or in a hybrid scheme (my current job is hybrid)
+
 --------------------------------------------------
 
 Estos son algunos de mis proyectos como Project Manager, realmente disfruto desarrollando proyectos
 y generando nuevas habilidades y conocimientos con diferentes personas de todo el mundo.
-gente de todo el mundo, tomar bootcamps y cursos es siempre una gran idea, todos estos proyectos 
+Tomar bootcamps y cursos es siempre una gran idea, todos estos proyectos 
 fueron realizados en línea, pero fácilmente
 pueden ser los mismos en un entorno híbrido o en la oficina
+
+PD. Los proyectos en oficina no van conmigo mucho (puedo hacerlos) creo que el trabajo a distancia es posible o en un esquema híbrido (mi trabajo actual es híbrido)
 
 ##### Interconstrucciones
 
