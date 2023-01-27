@@ -1,4 +1,0 @@
-Here are some of my PMP projects, hoping to get that certification soon!.
-
-$ git add .
-# Adds the file to your local repository and stages it for commit. Para sacar del "stage" un archivo, use "git reset HEAD EL_ARCHIVO".
