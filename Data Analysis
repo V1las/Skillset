@@ -8,3 +8,279 @@ Solving thw Muder Mystery SQL challenge
 Data Analysis capstone project for google
 
 https://www.kaggle.com/code/pablovilaboa/fork-of-bellabeat-casopr-ctico2-an-lisis-de-datos
+
+{
+  "metadata": {
+    "kernelspec": {
+      "name": "ir",
+      "display_name": "R",
+      "language": "R"
+    },
+    "language_info": {
+      "name": "R",
+      "codemirror_mode": "r",
+      "pygments_lexer": "r",
+      "mimetype": "text/x-r-source",
+      "file_extension": ".r",
+      "version": "4.0.5"
+    }
+  },
+  "nbformat_minor": 4,
+  "nbformat": 4,
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "source": "# Introducción\n\nUrška Sršen y Sando Mur fundaron Bellabeat, una empresa de alta tecnología que fabrica productos inteligentes focalizados en el cuidado de la salud. Sršen usó su experiencia como artista para desarrollar una tecnología con un bonito diseño que informará e inspirará a las mujeres de todo el mundo. Recopilar datos sobre la actividad física, el sueño, el estrés y la salud reproductiva le ha permitido a Bellabeat proporcionar a las mujeres conocimientos sobre su propia salud y sus hábitos. Desde su fundación, en 2013, Bellabeat creció a un ritmo vertiginoso y rápidamente se posicionó como empresa de bienestar impulsada por la tecnología para las mujeres.\n\n### Preguntar\n\nBellabeat es una empresa pequeña exitosa, pero tiene el potencial para convertirse en un actor más grande en el mercado global de dispositivos inteligentes. Urška Sršen, cofundadora y directora creativa de Bellabeat, cree que analizar los datos de actividad física de los dispositivos inteligentes podría desplegar nuevas oportunidades de negocio para la empresa.\n\nSršen sabe que el análisis de los datos de consumo disponibles de Bellabeat revelaría nuevas oportunidades de crecimiento. Ella le pidió al equipo de análisis computacional de datos de marketing que se concentrara en un producto Bellabeat y analizara los datos de uso de dispositivos inteligentes para conocer cómo las personas están usando sus dispositivos inteligentes. Después, con esta información, le gustaría recibir recomendaciones de alto nivel sobre cómo estas tendencias pueden colaborar en la estrategia de marketing de Bellabeat.\n\n*1.\t¿Cuáles son algunas tendencias de uso de los dispositivos inteligentes?\n\n*2.\t¿Cómo se podrían aplicar estas tendencias a los clientes de Bellabeat?*\n\n*3.\t¿Cómo podrían ayudar estas tendencias a influir en la estrategia de marketing de Bellabeat?\n\n### Preparar\nSršen te alienta a que uses datos públicos que exploren los hábitos cotidianos de los usuarios de dispositivos inteligentes.\n\nLos [datos utilizados](http://https://www.kaggle.com/datasets/arashnic/fitbit) son de caracter público ya que cuentan con una licencia Creative Commons 0: Public Domain.\nEste conjunto de datos de Kaggle contiene el seguimiento de la actividad física personal en treinta usuarios de Fitbit. Treinta usuarios elegibles de Fitbit prestaron su consentimiento para el envío de datos personales de seguimiento que incluyen rendimiento de la actividad física en minutos, ritmo cardíaco y monitoreo del sueño. Incluye información sobre la actividad diaria, pasos y ritmo cardíaco que se puede usar para explorar los hábitos de los usuarios.\n\n### Procesar\n\nPara procesar los datos será necesario instalar las siguientes librerías en R Studio",
+      "metadata": {}
+    },
+    {
+      "cell_type": "markdown",
+      "source": "# Instalación #\n\nlibrary(tidyverse)\nlibrary(lubridate)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(tidyr)\nlibrary(skimr)\nlibrary(janitor)",
+      "metadata": {
+        "execution": {
+          "iopub.status.busy": "2022-11-23T20:09:30.198523Z",
+          "iopub.execute_input": "2022-11-23T20:09:30.200316Z",
+          "iopub.status.idle": "2022-11-23T20:09:31.26468Z"
+        }
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": "Después de una revisión preliminar en Excel, comenzaremos a cargar los datos necesarios para el analisis.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "### Lectura de archivos CSV ###\n\ndaily_activity <- read.csv(file=\"/kaggle/input/fitbit/Fitabase Data 4.12.16-5.12.16/dailyActivity_merged.csv\")\nhourly_steps <- read.csv(file=\"/kaggle/input/fitbit/Fitabase Data 4.12.16-5.12.16/hourlySteps_merged.csv\")\ndaily_sleep <- read.csv(file=\"/kaggle/input/fitbit/Fitabase Data 4.12.16-5.12.16/sleepDay_merged.csv\")",
+      "metadata": {
+        "execution": {
+          "iopub.status.busy": "2022-11-23T20:11:04.219306Z",
+          "iopub.execute_input": "2022-11-23T20:11:04.220996Z",
+          "iopub.status.idle": "2022-11-23T20:11:04.291674Z"
+        },
+        "trusted": true
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "Seguido de esto, procederemos a revisar cada una de las columnas así conoceremos el nombre de cada una.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "head(daily_activity)\nhead(daily_sleep)\nhead(hourly_steps)",
+      "metadata": {
+        "execution": {
+          "iopub.status.busy": "2022-11-23T20:11:06.71297Z",
+          "iopub.execute_input": "2022-11-23T20:11:06.714638Z",
+          "iopub.status.idle": "2022-11-23T20:11:06.7745Z"
+        },
+        "trusted": true
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "Procederemos a obtener una vista previa de los datos.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "str(daily_activity)\nstr(daily_sleep)\nstr(hourly_steps)",
+      "metadata": {
+        "execution": {
+          "iopub.status.busy": "2022-11-23T20:11:09.476646Z",
+          "iopub.execute_input": "2022-11-23T20:11:09.478351Z",
+          "iopub.status.idle": "2022-11-23T20:11:09.526406Z"
+        },
+        "trusted": true
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "Como podemos notar, los formatos de fecha no son iguales. El siguiente código nos ayudará a mantener consistencia para poder juntar los 3 *\"conjuntos de datos\"*",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "daily_activity$ActivityDate <- format(strptime(daily_activity$ActivityDate, \"%m/%d/%Y\"), \"%m/%d/%Y\")\nhead(daily_activity$ActivityDate)\n\ndaily_sleep$SleepDay <- format(strptime(daily_sleep$SleepDay, \"%m/%d/%Y %I:%M:%S %p\"), \"%m/%d/%Y\")\nhead(daily_sleep$SleepDay)\n\nhourly_steps$ActivityHour=as.POSIXct(hourly_steps$ActivityHour, format=\"%m/%d/%Y %I:%M:%S %p\", tz=\"UTC\")\nhead(hourly_steps$ActivityHour)",
+      "metadata": {
+        "execution": {
+          "iopub.status.busy": "2022-11-23T20:11:12.317702Z",
+          "iopub.execute_input": "2022-11-23T20:11:12.319741Z",
+          "iopub.status.idle": "2022-11-23T20:11:12.372941Z"
+        },
+        "trusted": true
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "Cambiaremos el nombre de las fechas/tiempo.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "daily_activity <- rename (daily_activity, date = ActivityDate)\ncolnames(daily_activity)\n\ndaily_sleep <- rename (daily_sleep, date = SleepDay)\ncolnames(daily_sleep)\n\nhourly_steps <- rename (hourly_steps, date_time = ActivityHour)\ncolnames(hourly_steps)",
+      "metadata": {
+        "execution": {
+          "iopub.status.busy": "2022-11-23T20:11:14.638746Z",
+          "iopub.execute_input": "2022-11-23T20:11:14.640377Z",
+          "iopub.status.idle": "2022-11-23T20:11:14.685404Z"
+        },
+        "trusted": true
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "Juntaremos 2 conjuntos de datos, \"daily_activity\" y \"daily_sleep\", nos ayudará en un futuro para hacer un analisis correlacional.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "daily_activitySleep <- merge(daily_activity, daily_sleep, by=c(\"Id\", \"date\"))\nhead(daily_activitySleep$Id)\nhead(daily_activitySleep$date)",
+      "metadata": {
+        "execution": {
+          "iopub.status.busy": "2022-11-23T20:11:17.019865Z",
+          "iopub.execute_input": "2022-11-23T20:11:17.023912Z",
+          "iopub.status.idle": "2022-11-23T20:11:17.06626Z"
+        },
+        "trusted": true
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "Un nuevo conjunto de datos, incluye 4 tipos de actividades en una sola columna, así que los agruparemos en 4 categorías. \n\n* Sedentario (Sedentary Active)\n\n* Levemente Activo (Lightly Active)\n\n* Promedio Activo (Fairly Active)\n\n* Muy Activo (Very Active)",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "activity_type_data <- daily_activitySleep %>%\n  summarise(\n    activity_type = factor(case_when(\n      SedentaryMinutes > mean(SedentaryMinutes) & LightlyActiveMinutes < mean(LightlyActiveMinutes) & FairlyActiveMinutes < mean(FairlyActiveMinutes) & VeryActiveMinutes < mean(VeryActiveMinutes) ~ \"Sedentary Active\",\n      SedentaryMinutes < mean(SedentaryMinutes) & LightlyActiveMinutes > mean(LightlyActiveMinutes) & FairlyActiveMinutes < mean(FairlyActiveMinutes) & VeryActiveMinutes < mean(VeryActiveMinutes) ~ \"Lightly Active\",\n      SedentaryMinutes < mean(SedentaryMinutes) & LightlyActiveMinutes < mean(LightlyActiveMinutes) & FairlyActiveMinutes > mean(FairlyActiveMinutes) & VeryActiveMinutes < mean(VeryActiveMinutes) ~ \"Fairly Active\",\n      SedentaryMinutes < mean(SedentaryMinutes) & LightlyActiveMinutes < mean(LightlyActiveMinutes) & FairlyActiveMinutes < mean(FairlyActiveMinutes) & VeryActiveMinutes > mean(VeryActiveMinutes) ~ \"Very Active\",\n    ),levels=c(\"Sedentary Active\", \"Lightly Active\", \"Fairly Active\", \"Very Active\")), TotalMinutesAsleep, group=Id)%>%\n  drop_na()",
+      "metadata": {
+        "execution": {
+          "iopub.status.busy": "2022-11-23T20:11:19.439203Z",
+          "iopub.execute_input": "2022-11-23T20:11:19.440858Z",
+          "iopub.status.idle": "2022-11-23T20:11:19.457336Z"
+        },
+        "trusted": true
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "Separaremos fechas y tiempo, esto para que no interfiera el \"tiempo\" con la calidad de la visualización de los datos.\n\nAsimismo no interferirá con la correlacion con los datos de \"fecha\".",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "hourly_steps <- separate(hourly_steps, date_time, into=c(\"date\", \"time\"), sep= \" \")\nhead(hourly_steps)",
+      "metadata": {
+        "execution": {
+          "iopub.status.busy": "2022-11-23T20:11:23.292775Z",
+          "iopub.execute_input": "2022-11-23T20:11:23.294591Z",
+          "iopub.status.idle": "2022-11-23T20:11:23.673969Z"
+        },
+        "trusted": true
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "### Analizar\n\nEn las siguientes secciones podremos finalmente analizar todos los datos, esto a través de visualizaciones, gráficos y todo lo demás.\n\nPara esto hay unas aclaraciones que deben alzarse:\n\n* Aunque es recomendable dar 10,000 pasos diarios, esto no considera la intensidad, la cual es un factor importante de acuerdo a la OMS [1](https://apps.who.int/iris/bitstream/handle/10665/207007/9789290613947_eng.pdf)\n\n* La cantidad de horas de sueño necesarias varía según la persona y cambia a lo largo del ciclo de vida. La mayoría de los adultos, incluyendo los de edad avanzada, necesitan entre 7 y 8 horas de sueño cada noche. Los niños tienen diferentes necesidades de sueño según la edad. Esto de acuerdo con el National Heart, Lung, and Blood Institute [2](https://www.nhlbi.nih.gov/files/docs/public/sleep/Healthy_Sleep_At-A-Glance_SPANISH_Final.pdf)\n\n* Finalmente, las nuevas directrices recomiendan por lo menos de 150 a 300 minutos de actividad física aeróbica de intensidad moderada o vigorosa por semana para todos los adultos, incluidas las personas que viven con afecciones crónicas o discapacidad, y un promedio de 60 minutos al día para los niños y adolescente, esto de acuerdo con la OMS [3](https://www.who.int/es/news/item/25-11-2020-every-move-counts-towards-better-health-says-who#:~:text=Las%20nuevas%20directrices%20recomiendan%20por,para%20los%20ni%C3%B1os%20y%20adolescentes.)\n\nA continuación un resumen de los máximos, minimos y media.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "# Resumen del total de pasos diarios y nivel de actividad\ndaily_activity %>%\n  select(TotalSteps, VeryActiveMinutes, FairlyActiveMinutes, LightlyActiveMinutes, SedentaryMinutes ) %>%\n  summary()\n\n# Resumen de pasos contados por hora\nhourly_steps %>%\n  select(StepTotal) %>%\n  summary()\n\n# Resumen del sueño total en minutos\ndaily_sleep %>%\n  select(TotalMinutesAsleep) %>%\nsummary()",
+      "metadata": {
+        "execution": {
+          "iopub.status.busy": "2022-11-23T20:13:45.503619Z",
+          "iopub.execute_input": "2022-11-23T20:13:45.505274Z",
+          "iopub.status.idle": "2022-11-23T20:13:45.562404Z"
+        },
+        "trusted": true
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "Con los datos anteriormente mostrados concluimos que:\n\n* El tiempo que pasan los usuarios de manera sedentaria es de 991.2 minutos (vaya que es demasiado) que es igual a 16 horas aproximadamente\n\n* Los usuarios en promedio descansan 419.5 minutos, o mejor dicho, 7 horas. Este es un gran punto a favor, porque se encuentra dentro de lo recomendado para la OMS.\n\n* Como mencionamos anteriormente, los usuarios solo dan 7638, pero considerando que la mayoría de los usuarios, se mantienen activos, es un punto a favor.\n",
+      "metadata": {}
+    },
+    {
+      "cell_type": "markdown",
+      "source": "### Visualizar y Compartir\n\nEl histograma a continuación muestra los pasos medios realizados por los usuarios por hora en un día. Se puede observar que se realizan más de 500 pasos medios por hora de 12 a 14 horas, así como de 17 a 19 horas. El primer periodo de tiempo se refiere a la pausa para comer en el trabajo, mientras que el segundo periodo de tiempo es el final de la jornada laboral. Esta información es vital para la estrategia de marketing de Bellabeat.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "hourly_steps %>% \n  group_by(time) %>% \n  summarize(average_steps = mean(StepTotal)) %>% \n  ggplot() + \n  geom_col(mapping = aes(x=time, y = average_steps, fill = average_steps)) + \n  labs(title = \"Figure 1: Average steps per hour\", x=\"\", y=\"\") +\n  scale_fill_gradient(low =\"yellow\", high = \"red\")+\n  theme(axis.text.x = element_text(angle = 90))\n",
+      "metadata": {
+        "execution": {
+          "iopub.status.busy": "2022-11-23T21:25:13.118694Z",
+          "iopub.execute_input": "2022-11-23T21:25:13.120287Z",
+          "iopub.status.idle": "2022-11-23T21:25:13.424166Z"
+        },
+        "trusted": true
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "Existe una correlación negativa entre las actividades sedentarias y la duración del sueño. Esto significa que los usuarios físicamente inactivos duermen menos. Sin embargo, la investigación con tamaños de muestra grandes y métodos avanzados muestra que tales relaciones no son tan claras, lo que pone de manifiesto la importancia de futuras investigaciones en el área. Por lo tanto, hay que interpretar este hallazgo con precaución teniendo en cuenta sus limitaciones.\n",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "## Duración del sueño y tipos de actividad ##\nggplot(data=daily_activitySleep, aes(x=SedentaryMinutes, y=TotalMinutesAsleep)) + \n  geom_point() + \n  geom_smooth() + \n  labs(title=\"Figure 2: Sedentary activities and Sleep duration\")",
+      "metadata": {
+        "execution": {
+          "iopub.status.busy": "2022-11-23T21:33:47.514834Z",
+          "iopub.execute_input": "2022-11-23T21:33:47.516355Z",
+          "iopub.status.idle": "2022-11-23T21:33:47.884937Z"
+        },
+        "trusted": true
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "La relación entre los minutos totales de sueño y el tiempo total en la cama parece lineal. Así que si los usuarios de Bellabeat quieren mejorar su sueño, deberíamos considerar el uso de las notificaciones para ir a dormir.\n\nEsto mejoraría enormemente la calidad y tiempo de sueño de los usuarios\n",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "ggplot(data=daily_activitySleep, aes(x=TotalMinutesAsleep, y=TotalTimeInBed)) + \n  geom_point()+\n    geom_smooth()\n    labs(title=\"Figure 3: Total Minutes Asleep vs. Total Time in Bed\")\n    \n\n\n    ",
+      "metadata": {
+        "execution": {
+          "iopub.status.busy": "2022-11-23T21:47:31.009953Z",
+          "iopub.execute_input": "2022-11-23T21:47:31.011555Z",
+          "iopub.status.idle": "2022-11-23T21:47:31.306694Z"
+        },
+        "trusted": true
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "### Conclusiones\n\nConsiderando los puntos y visualizaciones podemos detemrinar lo siguiente:\n\n**Elevada actividad sedentaria de los usuarios.** \nCabe mencionar que 991,2 minutos o 16,5 horas del tiempo de los encuestados, se dedican a actividades sedentarias. Si Bellabeat planea un crecimiento más rentable.Una posible solución parece ser el envío de notificaciones por tiempo determinado de sedentarismo diario, lo cual ayudaría a mejorar la calidad de vida de los usuarios.\n\n**Las actividades sedentarias pueden reducir la duración del sueño.** \nLos datos analizados muestran que las actividades sedentarias se correlacionan negativamente con la duración del sueño de los usuarios. Este hallazgo puede utilizarse para dirigir la estrategia de marketing de Bellabeat a las mujeres que planean iniciar un estilo de vida saludable pero que necesitan cierta motivación e información adicional para seguir este camino. \n\n**Los usuarios son poco activos, pero siguen siendo activos**\nDe media, las usuarias caminan 7.638 pasos al día, lo que se considera un nivel algo activo y está ligeramente por debajo de los 10.000 pasos diarios que son recomendables para un estilo de vida saludable. SIN EMBARGO, no se hizo calculos sobre la intensidad de dichos pasos por lo cual no lo podemos considerarlos completamente como usuarios \"no saludables\".\nSe recomienda hacer un análisis más profundo donde se pueda observar dichas cualidades en al intensidad de los pasos.\n\n### Acciones a considerar\n\n1. Notificaciones dentro de la app, para indicar el tiempo sedentario del usuario e impulsarlo a realizar alguna actividad.\n\n2. Notificar al usuario (y dejarlo configurar) horas de sueño en especifico\n\n3. Considerar una investigacion a fondo sobre la intensidad de los pasos\n\n4. Si lo que se busca es aumentar la cantidad de pasos y no enfocarse en la intensidad, recompensar al usuario por medio de \"jugabilidad\" dentro del sistema.\n\n\n###### Agradecimientos\n\nAgradezco que hayas podido leer todo dentro de mi primer proyecto en R, estoy muy orgulloso de lo que he logrado y espero que tu también ;)\n\nAqui dejaré mi [LinkedIn](https://www.linkedin.com/in/pablo-vilaboa/) por si buscas conectar conmigo. Si tienes otro proyecto en R que quieras compartir, con gusto podemos trabajar juntos, busco mejorar siempre tanto en R, SQL y/o Excel.\n\nTambién quiero mejorar en Tableau o PoweBI.\n\n",
+      "metadata": {}
+    }
+  ]
+}
